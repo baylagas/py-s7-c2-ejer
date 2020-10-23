@@ -3,24 +3,36 @@ from prettytable import PrettyTable
 
 
 def createNewUser():
-    user = "test"
-    password = "12345"
-    email = "test@hotmail.com"
-    age = 23
+    user = input("user:")
+    password = input("password:")
+    email = input("email:")
+    age = int(input("email:"))
     insertUser(user, password, email, age)
+    viewAllUsers()
 
 
 def modifyUser():
-    oldUser = getUserById(3)
-    user = oldUser["user"] + "m"
-    password = oldUser["password"] + "6"
-    email = oldUser["email"] + "x"
-    age = int(oldUser["age"]) + 1
-    updateUser(3, user, password, email, age)
+    id = int(input("id:"))
+    oldUser = getUserById(id)
+
+    print(f"old user: {oldUser['user']}")
+    user = input("new user: ")
+
+    print(f"old password: {oldUser['password']}")
+    password = input("new password: ")
+
+    print(f"old email: {oldUser['email']}")
+    email = input("new email: ")
+
+    print(f"old age: {oldUser['age']}")
+    age = int(input("new age: "))
+
+    updateUser(id, user, password, email, age)
+    viewUserById(id)
 
 
 def removeUser():
-    id = 1
+    id = int(input("id:"))
     deleteUser(id)
     viewAllUsers()
 
@@ -38,8 +50,7 @@ def viewAllUsers():
     print(table)
 
 
-def viewUserById():
-    userId = 1
+def viewUserById(userId):
     user = getUserById(userId)
     table = PrettyTable()
     table.field_names = ["id", "user", "password", "email", "age"]
@@ -51,5 +62,6 @@ def viewUserById():
 
 # createNewUser()
 # modifyUser()
+# removeUser()
 # viewAllUsers()
-viewUserById()
+# viewUserById(1)
