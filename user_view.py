@@ -1,4 +1,4 @@
-from database import insertUser, updateUser, getUserById, getAllUsers
+from user_db import insertUser, updateUser, getUserById, getAllUsers, deleteUser
 from prettytable import PrettyTable
 
 
@@ -19,6 +19,12 @@ def modifyUser():
     updateUser(3, user, password, email, age)
 
 
+def removeUser():
+    id = 1
+    deleteUser(id)
+    viewAllUsers()
+
+
 def viewAllUsers():
     userList = getAllUsers()
 
@@ -32,6 +38,18 @@ def viewAllUsers():
     print(table)
 
 
+def viewUserById():
+    userId = 1
+    user = getUserById(userId)
+    table = PrettyTable()
+    table.field_names = ["id", "user", "password", "email", "age"]
+    table.add_row(
+        [user["id"], user["user"], user["password"], user["email"], user["age"]]
+    )
+    print(table)
+
+
 # createNewUser()
 # modifyUser()
-viewAllUsers()
+# viewAllUsers()
+viewUserById()
