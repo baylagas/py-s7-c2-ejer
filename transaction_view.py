@@ -15,8 +15,21 @@ def createNewTransaction(idBalance, idTranstype):
     viewAllTransaction()
 
 
-def viewAllTransaction():
-    transactionList = getAllTransaction()
+def modifyTransaction(idBalance, idTranstype):
+    id = int(input("id:"))
+    oldBalance = getBalanceById(id)
+
+    print(f"old title: {oldBalance['title']}")
+    title = input("new title: ")
+
+    amount = oldBalance["amount"]
+
+    updateBalance(id, idUser, title, amount)
+    viewBalanceById(id)
+
+
+def viewAllTransaction(idBalance):
+    transactionList = getAllTransaction(idBalance)
 
     table = PrettyTable()
     table.field_names = ["id", "idbalance", "idtranstype", "title", "amount", "created"]

@@ -12,7 +12,7 @@ def createNewBalance(idUser):
     title = input("title:")
     amount = 0.0
     insertBalance(idUser, title, amount)
-    viewAllBalance()
+    viewAllBalance(idUser)
 
 
 def modifyBalance(idUser):
@@ -28,9 +28,9 @@ def modifyBalance(idUser):
     viewBalanceById(id)
 
 
-def removeBalance():
+def removeBalance(idUser):
     id = int(input("id:"))
-    deleteBalance(id)
+    deleteBalance(id, idUser)
     viewAllBalance()
 
 
@@ -39,13 +39,13 @@ def viewBalanceById(balanceId):
     table = PrettyTable()
     table.field_names = ["id", "idUser", "title", "amount"]
     table.add_row(
-        [balance["id"], balance["idUser"], balance["title"], balance["amount"]]
+        [balance["id"], balance["iduser"], balance["title"], balance["amount"]]
     )
     print(table)
 
 
-def viewAllBalance():
-    balanceList = getAllBalance()
+def viewAllBalance(idUser):
+    balanceList = getAllBalance(idUser)
 
     table = PrettyTable()
     table.field_names = ["id", "iduser", "title", "amount"]
@@ -55,6 +55,10 @@ def viewAllBalance():
             [balance["id"], balance["iduser"], balance["title"], balance["amount"]]
         )
     print(table)
+
+
+def getBalanceObjectById(idBalance):
+    return getBalanceById(idBalance)
 
 
 # createNewBalance()

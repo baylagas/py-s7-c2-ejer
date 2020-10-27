@@ -6,7 +6,7 @@ def createNewUser():
     user = input("user:")
     password = input("password:")
     email = input("email:")
-    age = int(input("email:"))
+    age = int(input("age:"))
     insertUser(user, password, email, age)
     viewAllUsers()
 
@@ -58,6 +58,10 @@ def viewUserById(userId):
         [user["id"], user["user"], user["password"], user["email"], user["age"]]
     )
     print(table)
+
+
+def getUserObjectById(idUser):
+    return getUserById(idUser)
 
 
 # createNewUser()

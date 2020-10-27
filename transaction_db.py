@@ -66,11 +66,14 @@ def getTransactionById(id):
     return user
 
 
-def getAllTransaction():
+def getAllTransaction(idBalance):
     try:
         connection = getConnection()
         with connection.cursor() as mycursor:
-            sql = "SELECT * FROM pfinancedb.transaction;"
+            sql = (
+                f"SELECT * FROM pfinancedb.transaction "
+                + f"where idbalance={idBalance};"
+            )
             mycursor.execute(sql)
             user = mycursor.fetchall()
     finally:

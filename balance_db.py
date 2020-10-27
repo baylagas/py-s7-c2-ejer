@@ -20,6 +20,7 @@ def insertBalance(idUser, title, amount=0.0):
                 f"INSERT INTO `pfinancedb`.`balance` (`id`,`iduser`,`title`,`amount`) "
                 + f"VALUES(0,{idUser},'{title}',{amount});"
             )
+            print(sql)
             mycursor.execute(sql)
             connection.commit()
     finally:
@@ -32,8 +33,8 @@ def updateBalance(id, idUser, title, amount):
         with connection.cursor() as mycursor:
             sql = (
                 "UPDATE `pfinancedb`.`balance` "
-                + f"SET `iduser` = {idUser},`title` = '{title}',`amount` = {amount} "
-                + f"WHERE `id` = {id};"
+                + f"SET `title` = '{title}',`amount` = {amount} "
+                + f"WHERE `id` = {id} and iduser = {idUser};"
             )
             mycursor.execute(sql)
             connection.commit()
@@ -41,11 +42,14 @@ def updateBalance(id, idUser, title, amount):
         connection.close()
 
 
-def deleteBalance(id):
+def deleteBalance(id, idUser):
     try:
         connection = getConnection()
         with connection.cursor() as mycursor:
-            sql = f"DELETE FROM `pfinancedb`.`balance` WHERE id={id};"
+            sql = (
+                f"DELETE FROM `pfinancedb`.`balance` "
+                + f"WHERE id={id} and iduser={idUser};"
+            )
             mycursor.execute(sql)
             connection.commit()
     finally:
@@ -64,11 +68,11 @@ def getBalanceById(id):
     return user
 
 
-def getAllBalance():
+def getAllBalance(idUser):
     try:
         connection = getConnection()
         with connection.cursor() as mycursor:
-            sql = "SELECT * FROM pfinancedb.balance;"
+            sql = f"SELECT * FROM pfinancedb.balance where iduser={idUser};"
             mycursor.execute(sql)
             user = mycursor.fetchall()
     finally:
