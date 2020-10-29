@@ -8,24 +8,29 @@ from transaction_db import (
 from prettytable import PrettyTable
 
 
-def createNewTransaction(idBalance, idTranstype):
+def createNewTransaction(idBalance):
+    idTranstype = int(input("transaction type (1 - income, 2 - expense): "))
     title = input("title: ")
     amount = float(input("amount: "))
     insertTransaction(idBalance, idTranstype, title, amount)
-    viewAllTransaction()
+    viewAllTransaction(idBalance)
 
 
-def modifyTransaction(idBalance, idTranstype):
+def modifyTransaction(idBalance):
     id = int(input("id:"))
-    oldBalance = getBalanceById(id)
+    oldTransaction = getTransactionById(id, idBalance)
 
-    print(f"old title: {oldBalance['title']}")
+    print(f"old transaction type: {oldTransaction['idtranstype']}")
+    idTranstype = input("new transaction type (1-Income, 2-Expense): ")
+
+    print(f"old title: {oldTransaction['title']}")
     title = input("new title: ")
 
-    amount = oldBalance["amount"]
+    print(f"old amount: {oldTransaction['amount']}")
+    amount = float(input("new amount: "))
 
-    updateBalance(id, idUser, title, amount)
-    viewBalanceById(id)
+    updateTransaction(id, idBalance, idTranstype, title, amount)
+    viewTransactionById(id, idBalance)
 
 
 def viewAllTransaction(idBalance):
@@ -46,3 +51,21 @@ def viewAllTransaction(idBalance):
             ]
         )
     print(table)
+
+
+def viewTransactionById(idTransaction, idBalance):
+    transaction = getTransactionById(idTransaction, idBalance)
+    table = PrettyTable()
+    table.field_names = ["id", "idbalance", "idtranstype", "title", "amount", "created"]
+    table.add_row(
+        [
+            transaction["id"],
+            transaction["idbalance"],
+            transaction["idtranstype"],
+            transaction["title"],
+            transaction["amount"],
+            transaction["created"],
+        ]
+    )
+    print(table)
+    table.clear()

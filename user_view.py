@@ -48,6 +48,7 @@ def viewAllUsers():
             [user["id"], user["user"], user["password"], user["email"], user["age"]]
         )
     print(table)
+    table.clear()
 
 
 def viewUserById(userId):
@@ -58,6 +59,7 @@ def viewUserById(userId):
         [user["id"], user["user"], user["password"], user["email"], user["age"]]
     )
     print(table)
+    table.clear()
 
 
 def getUserObjectById(idUser):

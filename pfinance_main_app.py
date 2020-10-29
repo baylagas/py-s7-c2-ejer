@@ -12,14 +12,18 @@ from balance_view import (
     removeBalance,
     getBalanceObjectById,
 )
-from transaction_view import viewAllTransaction
+from transaction_view import viewAllTransaction, createNewTransaction, modifyTransaction
 
 
 def goToBalanceSubMenu(userObj):
     idBalance = int(input("id balance: "))
-    currentBalance = getBalanceObjectById(idBalance)
+    # currentBalance = getBalanceObjectById(idBalance)
     while True:
-        print(f"balance: {userObj['user']}|{currentBalance['title']} - submenu")
+        currentBalance = getBalanceObjectById(idBalance)
+        print(
+            f"balance: {userObj['user']}|{currentBalance['title']}"
+            + f"|${currentBalance['amount']:.2f} - submenu"
+        )
         print("0 - back to balance")
         print("1 - view all transaction")
         print("2 - create transaction")
@@ -32,6 +36,10 @@ def goToBalanceSubMenu(userObj):
             break
         elif option == 1:
             viewAllTransaction(idBalance)
+        elif option == 2:
+            createNewTransaction(idBalance)
+        elif option == 3:
+            modifyTransaction(idBalance)
 
 
 def goToUserSubMenu():

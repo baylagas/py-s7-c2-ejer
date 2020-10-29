@@ -42,6 +42,7 @@ def viewBalanceById(balanceId):
         [balance["id"], balance["iduser"], balance["title"], balance["amount"]]
     )
     print(table)
+    table.clear()
 
 
 def viewAllBalance(idUser):
@@ -55,6 +56,7 @@ def viewAllBalance(idUser):
             [balance["id"], balance["iduser"], balance["title"], balance["amount"]]
         )
     print(table)
+    table.clear()
 
 
 def getBalanceObjectById(idBalance):

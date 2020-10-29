@@ -1,6 +1,10 @@
 import pymysql
 
 
+INCOME = 1
+EXPENSE = 2
+
+
 def getConnection():
     connection = pymysql.connect(
         host="localhost",
@@ -18,13 +22,15 @@ def insertTransaction(idBalance, idTranstype, title, amount=0.0):
         with connection.cursor() as mycursor:
             sql = (
                 "INSERT INTO `pfinancedb`.`transaction` "
-                + "(`id`,`idbalance`,`idtranstype`,`title`,`amount`) "
-                + f"VALUES(0,{idBalance},{idTranstype},'{title}',{amount});"
+                + "(`id`,`idbalance`,`idtranstype`,`title`,`amount`,created) "
+                + f"VALUES(0,{idBalance},{idTranstype},'{title}',{amount},NOW());"
             )
+            print(sql)
             mycursor.execute(sql)
             connection.commit()
     finally:
         connection.close()
+        recalculateBalance(idBalance)
 
 
 def updateTransaction(id, idBalance, idTranstype, title, amount=0.0):
@@ -41,6 +47,7 @@ def updateTransaction(id, idBalance, idTranstype, title, amount=0.0):
             connection.commit()
     finally:
         connection.close()
+        recalculateBalance(idBalance)
 
 
 def deleteTransaction(id):
@@ -54,11 +61,14 @@ def deleteTransaction(id):
         connection.close()
 
 
-def getTransactionById(id):
+def getTransactionById(id, idBalance):
     try:
         connection = getConnection()
         with connection.cursor() as mycursor:
-            sql = f"SELECT * FROM pfinancedb.transaction where id={id};"
+            sql = (
+                f"SELECT * FROM pfinancedb.transaction "
+                + f"where id={id} and idbalance={idBalance};"
+            )
             mycursor.execute(sql)
             user = mycursor.fetchone()
     finally:
@@ -79,3 +89,35 @@ def getAllTransaction(idBalance):
     finally:
         connection.close()
     return user
+
+
+def getTotalTrans(idBalance, idTranstype):
+    try:
+        connection = getConnection()
+        with connection.cursor() as mycursor:
+            sql = (
+                "select if(sum(amount) is null, 0.0, sum(amount)) as total "
+                + f"from pfinancedb.transaction where idbalance={idBalance} and idtranstype={idTranstype};"
+            )
+            mycursor.execute(sql)
+            totalIncome = mycursor.fetchone()
+    finally:
+        connection.close()
+    return totalIncome
+
+
+def recalculateBalance(idBalance):
+    totalIncome = getTotalTrans(idBalance, INCOME)
+    totalExpense = getTotalTrans(idBalance, EXPENSE)
+    totalBalance = totalIncome["total"] - totalExpense["total"]
+    try:
+        connection = getConnection()
+        with connection.cursor() as mycursor:
+            sql = (
+                "UPDATE `pfinancedb`.`balance` "
+                + f"SET `amount` = {totalBalance} WHERE `id` = {idBalance};"
+            )
+            mycursor.execute(sql)
+            connection.commit()
+    finally:
+        connection.close()
